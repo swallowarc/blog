@@ -1,0 +1,10 @@
+{{ define "main" }}
+<p class="lead">{{ site.Params.description }}</p>
+{{ $pages := where site.RegularPages "Section" "posts" }}
+{{ $paginator := .Paginate $pages }}
+<ul class="post-list">
+  {{ range $paginator.Pages }}{{ partial "post-item.html" . }}{{ end }}
+</ul>
+{{ if not $pages }}<p class="empty">まだ記事はありません。</p>{{ end }}
+{{ partial "pager.html" . }}
+{{ end }}

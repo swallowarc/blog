@@ -1,0 +1,7 @@
+{{ with .Paginator }}{{ if gt .TotalPages 1 }}
+<nav class="pager">
+  {{ if .HasPrev }}<a href="{{ .Prev.URL }}">← 新しい記事</a>{{ else }}<span></span>{{ end }}
+  <span>{{ .PageNumber }} / {{ .TotalPages }}</span>
+  {{ if .HasNext }}<a href="{{ .Next.URL }}">古い記事 →</a>{{ else }}<span></span>{{ end }}
+</nav>
+{{ end }}{{ end }}

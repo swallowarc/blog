@@ -1,0 +1,7 @@
+<li class="post-item">
+  <div class="post-meta">
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+    {{ range (.GetTerms "categories") }}<a class="kind" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
+  </div>
+  <a class="post-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
+</li>

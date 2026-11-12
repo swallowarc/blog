@@ -1,0 +1,14 @@
+{{ define "main" }}
+<h1 class="list-title">{{ .Title }}</h1>
+{{ if eq .Kind "taxonomy" }}
+<ul class="term-list">
+  {{ range .Data.Terms.ByCount }}<li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a><span>{{ .Count }}</span></li>{{ end }}
+</ul>
+{{ else }}
+{{ $paginator := .Paginate .RegularPagesRecursive }}
+<ul class="post-list">
+  {{ range $paginator.Pages }}{{ partial "post-item.html" . }}{{ end }}
+</ul>
+{{ partial "pager.html" . }}
+{{ end }}
+{{ end }}

@@ -1,0 +1,19 @@
+{{ define "main" }}
+<article>
+  <header class="article-header">
+    <div class="post-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+      {{ range (.GetTerms "categories") }}<a class="kind" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
+    </div>
+    <h1>{{ .Title }}</h1>
+  </header>
+  <div class="article-body">
+    {{ .Content }}
+  </div>
+  {{ with .GetTerms "tags" }}
+  <footer class="article-tags">
+    {{ range . }}<a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}
+  </footer>
+  {{ end }}
+</article>
+{{ end }}
