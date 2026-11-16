@@ -3,7 +3,7 @@ baseURL = "https://blog.swallowarc.jp/"
 locale = "ja"
 defaultContentLanguage = "ja"
 hasCJKLanguage = true
-title = "swallowarc blog"
+title = "agent.log"
 enableRobotsTXT = true
 capitalizeListTitles = false
 
