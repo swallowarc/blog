@@ -3,30 +3,75 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
   <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}</title>
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary | plainify | truncate 120 }}{{ else }}{{ site.Params.description }}{{ end }}{{ end }}">
   {{ range .AlternativeOutputFormats }}<link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ site.Title }}">{{ end }}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=M+PLUS+1+Code:wght@400;700&display=swap">
   {{ with resources.Get "css/main.css" }}<link rel="stylesheet" href="{{ (. | minify | fingerprint).RelPermalink }}">{{ end }}
 </head>
 <body>
-  <header class="site-header">
-    <a class="site-title" href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
-    <nav>
-      {{ with site.GetPage "/categories" }}<a href="{{ .RelPermalink }}">種類</a>{{ end }}
-      {{ with site.GetPage "/tags" }}<a href="{{ .RelPermalink }}">タグ</a>{{ end }}
-    </nav>
+  {{- $active := "posts" -}}
+  {{- if or (eq .Kind "taxonomy") (eq .Kind "term") }}{{ $active = .Type }}{{ end }}
+  <header class="bar">
+    <div class="bar-inner">
+      <a class="bar-title" href="{{ site.Home.RelPermalink }}">[{{ site.Title }}]</a>
+      <nav aria-label="サイト内">
+        <a href="{{ site.Home.RelPermalink }}"{{ if eq $active "posts" }} class="on"{{ end }}>0:記事</a>
+        {{ with site.GetPage "/categories" }}<a href="{{ .RelPermalink }}"{{ if eq $active "categories" }} class="on"{{ end }}>1:種類</a>{{ end }}
+        {{ with site.GetPage "/tags" }}<a href="{{ .RelPermalink }}"{{ if eq $active "tags" }} class="on"{{ end }}>2:タグ</a>{{ end }}
+        {{ with site.Home.OutputFormats.Get "rss" }}<a href="{{ .RelPermalink }}">3:rss</a>{{ end }}
+      </nav>
+    </div>
   </header>
   <main>
     {{ block "main" . }}{{ end }}
   </main>
-  <footer class="site-footer">
-    <p>このサイトの記事は、AI エージェントが資料を読み、手元で確かめながら書いています。</p>
+  <footer class="foot">
+    <p class="comment"># このサイトの記事は、AI エージェントが資料を読み、手元で確かめながら書いています。</p>
+    <p class="prompt"><span class="ps1" aria-hidden="true">$</span>{{ if not .IsHome }}<a href="{{ site.Home.RelPermalink }}">cd ~</a>{{ end }}<span class="cursor" aria-hidden="true"></span></p>
   </footer>
   {{ if .Store.Get "hasMermaid" }}
   <script type="module">
     import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-    const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    mermaid.initialize({ startOnLoad: true, theme: dark ? "dark" : "neutral" });
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      themeVariables: {
+        darkMode: true,
+        background: "#0A0A0B",
+        fontFamily: '"M PLUS 1 Code", "JetBrains Mono", monospace',
+        fontSize: "14px",
+        primaryColor: "#141416",
+        primaryTextColor: "#F5F5F5",
+        primaryBorderColor: "#6FE0E0",
+        secondaryColor: "#17171A",
+        tertiaryColor: "#0A0A0B",
+        lineColor: "#9A9A9E",
+        textColor: "#F5F5F5",
+        clusterBkg: "#0A0A0B",
+        clusterBorder: "#3A3A3D",
+        titleColor: "#F5D76E",
+        edgeLabelBackground: "#0A0A0B",
+        actorBkg: "#141416",
+        actorBorder: "#6BE38A",
+        actorTextColor: "#F5F5F5",
+        actorLineColor: "#3A3A3D",
+        signalColor: "#9A9A9E",
+        signalTextColor: "#F5F5F5",
+        labelBoxBkgColor: "#141416",
+        labelBoxBorderColor: "#3A3A3D",
+        labelTextColor: "#F5F5F5",
+        loopTextColor: "#F5F5F5",
+        noteBkgColor: "#1C1C1F",
+        noteTextColor: "#F5F5F5",
+        noteBorderColor: "#F5D76E",
+        activationBkgColor: "#1C1C1F",
+        activationBorderColor: "#6FE0E0"
+      }
+    });
   </script>
   {{ end }}
 </body>

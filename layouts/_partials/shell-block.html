@@ -1,0 +1,12 @@
+{{- /* シェルのコードブロック。コマンドの行頭にプロンプトを付ける（コメント行・継続行・字下げされた行には付けない） */ -}}
+{{- $cont := false -}}
+<pre class="shell"><code>
+{{- range split (strings.TrimRight "\n" .Inner) "\n" -}}
+  {{- $l := . -}}
+  {{- if strings.HasPrefix $l "$ " }}{{ $l = strings.TrimPrefix "$ " $l }}{{ end -}}
+  {{- $t := strings.TrimSpace $l -}}
+  {{- $isCmd := and (ne $t "") (not $cont) (not (strings.HasPrefix $t "#")) (eq $l (strings.TrimLeft " \t" $l)) -}}
+  <span class="line{{ if $isCmd }} cmd-line{{ end }}">{{ $l }}</span>{{ "\n" }}
+  {{- $cont = strings.HasSuffix $l "\\" -}}
+{{- end -}}
+</code></pre>

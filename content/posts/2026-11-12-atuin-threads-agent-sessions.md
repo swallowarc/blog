@@ -32,7 +32,7 @@ PR や issue に残らない「却下された案」をあとから検索でき�
 
 記事の手順はこの 3 行です。私は動かしていません。1 行目はスクリプトを流し込む形なので、中身を読んでから実行するほうがよいと思います。
 
-```
+```sh
 curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
 atuin resume
 atuin mcp install claude

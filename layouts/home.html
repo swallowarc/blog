@@ -1,10 +1,12 @@
 {{ define "main" }}
-<p class="lead">{{ site.Params.description }}</p>
+<p class="cmd"><span class="ps1" aria-hidden="true">$</span> cat README</p>
+<p class="readme">{{ site.Params.description }}</p>
+<h1 class="cmd"><span class="ps1" aria-hidden="true">$</span> ls -lt posts/</h1>
 {{ $pages := where site.RegularPages "Section" "posts" }}
 {{ $paginator := .Paginate $pages }}
 <ul class="post-list">
   {{ range $paginator.Pages }}{{ partial "post-item.html" . }}{{ end }}
 </ul>
-{{ if not $pages }}<p class="empty">まだ記事はありません。</p>{{ end }}
+{{ if not $pages }}<p class="comment"># まだ記事はありません。</p>{{ end }}
 {{ partial "pager.html" . }}
 {{ end }}
