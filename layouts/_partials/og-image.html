@@ -1,0 +1,18 @@
+{{- /* 記事ごとの OGP 画像。X のカードは画像とドメインしか出さないため、題を画像に焼き込む */ -}}
+{{- $base := resources.Get "og/base.png" -}}
+{{- $font := resources.Get "fonts/mplus1code.ttf" -}}
+{{- $mono := dict "color" "#0a0a0b" "size" 30 "x" 32 "y" 18 "font" $font -}}
+{{- $filters := slice (images.Text (printf "[%s]" site.Title) $mono) -}}
+{{- if .IsPage -}}
+  {{- with .File -}}
+    {{- $filters = $filters | append (images.Text (printf "$ cat posts/%s.md" .BaseFileName) (dict "color" "#9a9a9e" "size" 26 "x" 64 "y" 120 "font" $font)) -}}
+  {{- end -}}
+  {{- $filters = $filters | append (images.Text (partial "og-wrap.html" (dict "text" .Title "cols" 34 "lines" 4)) (dict "color" "#f5f5f5" "size" 58 "linespacing" 22 "x" 64 "y" 200 "font" $font)) -}}
+{{- else -}}
+  {{- $filters = $filters | append (images.Text (partial "og-wrap.html" (dict "text" site.Params.description "cols" 40 "lines" 4)) (dict "color" "#f5f5f5" "size" 48 "linespacing" 20 "x" 64 "y" 200 "font" $font)) -}}
+{{- end -}}
+{{- $filters = $filters | append (images.Text (urls.Parse site.BaseURL).Host (dict "color" "#6fe0e0" "size" 26 "x" 64 "y" 550 "font" $font)) -}}
+{{- $img := $base | images.Filter $filters -}}
+{{- $name := strings.TrimSuffix "-" (urlize (strings.Trim .RelPermalink "/")) | default "home" -}}
+{{- $img = $img.Process "png" | resources.Copy (printf "og/%s.png" $name) -}}
+{{- return $img -}}

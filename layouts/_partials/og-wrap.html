@@ -1,0 +1,28 @@
+{{- /* images.Text は空白でしか折り返さないので、日本語の題を桁数で折り返す。
+     半角は 1 桁、それ以外は 2 桁と数える（等幅フォント前提）。英単語は途中で切らず、
+     行頭に来る句読点と閉じ括弧は前の行に付ける。行数を超えたら末尾を … にする。 */ -}}
+{{- $cols := .cols -}}
+{{- $maxLines := .lines -}}
+{{- $lines := slice -}}
+{{- $cur := "" -}}
+{{- $w := 0 -}}
+{{- range findRE `[!-~]+|\s+|.` .text -}}
+  {{- $tw := cond (findRE `^[ -~]+$` .) (len .) (mul (strings.RuneCount .) 2) -}}
+  {{- $space := findRE `^\s+$` . -}}
+  {{- $tail := findRE `^[、。，．,.）」』】〉》!?！？ー]$` . -}}
+  {{- if and (gt (add $w $tw) $cols) (gt $w 0) (not $tail) -}}
+    {{- $lines = $lines | append (trim $cur " ") -}}
+    {{- $cur = "" -}}{{- $w = 0 -}}
+  {{- end -}}
+  {{- if not (and $space (eq $w 0)) -}}
+    {{- $cur = printf "%s%s" $cur (cond (gt (len $space) 0) " " .) -}}
+    {{- $w = add $w (cond (gt (len $space) 0) 1 $tw) -}}
+  {{- end -}}
+{{- end -}}
+{{- with trim $cur " " }}{{ $lines = $lines | append . }}{{ end -}}
+{{- if gt (len $lines) $maxLines -}}
+  {{- $last := index $lines (sub $maxLines 1) -}}
+  {{- $last = printf "%s…" (substr $last 0 (sub (strings.RuneCount $last) 1)) -}}
+  {{- $lines = (first (sub $maxLines 1) $lines) | append $last -}}
+{{- end -}}
+{{- return delimit $lines "\n" -}}
