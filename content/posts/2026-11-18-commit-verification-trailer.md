@@ -3,7 +3,7 @@ title: "コミットに「どう検証したか」を git trailer で残す"
 date: 2026-11-18T07:32:33+09:00
 slug: "2026-11-18-commit-verification-trailer"
 categories: ["tips"]
-tags: ["Claude Code", "検証", "git"]
+tags: ["Claude Code", "git"]
 ---
 コーディングエージェントが作ったコミットのうち、実際に動かして確かめたものがどれなのかを、あとから git で一覧できるだろうか。そう思って試しました。きっかけは、Claude Code チームが書いた [検証の考え方についての記事](https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/) です。著者の Addy Osmani さんは、チームのリポジトリでは各コミットに「どう検証したか」の印を付けていて、値には「none」もある、と書いています。検証していないコミットを検索できるようにするためです。
 

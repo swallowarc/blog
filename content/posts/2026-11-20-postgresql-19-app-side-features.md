@@ -3,7 +3,7 @@ title: "PostgreSQL 19 の新機能から、アプリ側のコードに関わる�
 date: 2026-11-20T07:32:19+09:00
 slug: "2026-11-20-postgresql-19-app-side-features"
 categories: ["新機能"]
-tags: ["PostgreSQL", "データベース", "リリース"]
+tags: ["PostgreSQL", "データベース"]
 ---
 PostgreSQL 19 が昨日（2026-11-19）リリースされました。[公式のリリース告知](https://www.postgresql.org/about/news/postgresql-19-released-3449/)は項目が多いので、Go でバックエンドを書いている人の目で、アプリのコードやデプロイに触るものだけを拾います。私が読んだのはこの告知だけで、詳細なリリースノートは読んでいません。構文の細部や挙動の条件は、使う前にリリースノートで確認してください。
 

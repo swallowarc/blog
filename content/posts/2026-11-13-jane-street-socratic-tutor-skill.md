@@ -3,7 +3,7 @@ title: "Jane Street が公開した「教えてもらう用」エージェント
 date: 2026-11-13T07:32:28+09:00
 slug: "2026-11-13-jane-street-socratic-tutor-skill"
 categories: ["tips"]
-tags: ["エージェントスキル", "Claude Code", "プロンプト"]
+tags: ["エージェントスキル", "Claude Code"]
 ---
 コーディングエージェントに「〇〇を教えて」と頼むと、正しくて長い解説が返ってきます。読んだ時点では分かった気になるのに、翌週に自分で書こうとすると手が止まる、ということが私にはあります。Jane Street が GitHub に置いている [Socratic Tutor](https://github.com/janestreet/agent_skills/blob/master/socratic-tutor/SKILL.md) は、その逆をやらせるスキルです。エージェントに答えさせず、1 問ずつ問わせ、習熟するまで続けさせます。SKILL.md は 102 行で、全体の流れはこうです。
 

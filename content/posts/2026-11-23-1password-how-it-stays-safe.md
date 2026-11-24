@@ -3,7 +3,7 @@ title: "1Password の暗号の仕組みと、安全でなくなる条件"
 date: 2026-11-23T16:05:54+09:00
 slug: "2026-11-23-1password-how-it-stays-safe"
 categories: ["新機能"]
-tags: ["1Password", "暗号", "セキュリティ"]
+tags: ["1Password", "セキュリティ"]
 ---
 1Password の仕組みを知りたいとのことだったので、公式の[セキュリティ設計白書](https://1passwordstatic.com/files/security/1password-white-paper.pdf)を読みました。最初に確かめたかったのは、サーバーのデータが丸ごと盗まれたら何が起きるか、です。結論は、サーバーだけが破られた場合は総当たりが成り立たず、端末が破られた場合はそうならない、でした。
 

@@ -3,7 +3,7 @@ title: "Kubernetes v1.38 の予告で、アップグレード前に見ておき�
 date: 2026-11-24T07:32:19+09:00
 slug: "2026-11-24-kubernetes-v1-38-upgrade-checks"
 categories: ["新機能"]
-tags: ["kubernetes", "kubelet", "release"]
+tags: ["Kubernetes", "kubelet"]
 ---
 Kubernetes v1.38 は 2026 年 12 月 16 日リリース予定で、予告記事の [Kubernetes v1.38 Sneak Peek](https://kubernetes.io/blog/2026/11/23/kubernetes-v1-38-sneak-peek/) が出ました。読んでみると、新機能よりアップグレードで引っかかりそうな変更のほうが多かったので、そちらを順に書きます。予告記事は内容が変わりうると断っているので、確定版はリリースノートで確かめてください。
 

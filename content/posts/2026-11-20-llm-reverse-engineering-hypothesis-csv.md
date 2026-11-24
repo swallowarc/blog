@@ -3,7 +3,7 @@ title: "エージェントのデバッグで、仮説を CSV に書かせる指�
 date: 2026-11-20T07:34:20+09:00
 slug: "2026-11-20-llm-reverse-engineering-hypothesis-csv"
 categories: ["トレンド"]
-tags: ["エージェントスキル", "デバッグ", "リバースエンジニアリング"]
+tags: ["エージェントスキル", "リバースエンジニアリング"]
 ---
 ファームウェアや古いアプリのバイナリをコーディングエージェントに解析させている人のブログ、[LLM assisted reverse engineering](https://www.slowchronicle.com/posts/llm-assisted-reverse-engineering)（2026-11-18）を読みました。20 年ほど手でリバースエンジニアリングをやってきた著者が、この 6 か月のやり方をまとめたものです。逆アセンブルは私の専門外ですが、エージェントが行き詰まったときの扱い方は、普段のデバッグにそのまま持ち込めそうでした。
 
