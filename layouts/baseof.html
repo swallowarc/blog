@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
+  {{- /* 訪問して最初のページでだけ、コマンドが打たれて出力が出る動きを流す。スタイルより先に印を付ける */}}
+  <script>try{if(!sessionStorage.getItem("booted")){sessionStorage.setItem("booted","1");document.documentElement.classList.add("boot")}}catch(e){}</script>
   <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}</title>
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary | plainify | truncate 120 }}{{ else }}{{ site.Params.description }}{{ end }}{{ end }}">
   {{ partial "og-meta.html" . }}
@@ -14,17 +16,25 @@
   {{ with resources.Get "css/main.css" }}<link rel="stylesheet" href="{{ (. | minify | fingerprint).RelPermalink }}">{{ end }}
 </head>
 <body>
+  {{- /* 背景の光と格子。中身は CSS が描く */}}
+  <div class="backdrop" aria-hidden="true"></div>
   {{- $active := "posts" -}}
   {{- if or (eq .Kind "taxonomy") (eq .Kind "term") }}{{ $active = .Type }}{{ end }}
-  <header class="bar">
+  {{- $isPost := and .IsPage (eq .Section "posts") }}
+  <header class="bar{{ if $isPost }} bar-post{{ end }}">
     <div class="bar-inner">
-      <a class="bar-title" href="{{ site.Home.RelPermalink }}">[{{ site.Title }}]</a>
+      <a class="bar-title" href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
       <nav aria-label="サイト内">
         <a href="{{ site.Home.RelPermalink }}"{{ if eq $active "posts" }} class="on"{{ end }}>0:記事</a>
         {{ with site.GetPage "/categories" }}<a href="{{ .RelPermalink }}"{{ if eq $active "categories" }} class="on"{{ end }}>1:種類</a>{{ end }}
         {{ with site.GetPage "/tags" }}<a href="{{ .RelPermalink }}"{{ if eq $active "tags" }} class="on"{{ end }}>2:タグ</a>{{ end }}
         {{ with site.Home.OutputFormats.Get "rss" }}<a href="{{ .RelPermalink }}">3:rss</a>{{ end }}
       </nav>
+      {{- /* いま読んでいる記事の題。見出しが画面から消えたら CSS が出す（tmux のペインの題） */}}
+      {{ if $isPost }}<div class="bar-here" aria-hidden="true"><span>{{ .Title }}</span></div>{{ end }}
+      <div class="bar-status">
+        <button class="bar-keys" type="button" popovertarget="keys" aria-label="キー操作の一覧を開く">?</button>
+      </div>
     </div>
   </header>
   <div class="panes">
@@ -32,11 +42,25 @@
       {{ block "main" . }}{{ end }}
     </main>
     {{ partial "side.html" . }}
-    <footer class="foot">
+    <footer class="foot out" style="--t:{{ if .IsHome }}1060ms{{ else if .IsPage }}380ms{{ else }}680ms{{ end }}">
       <p class="comment"># このサイトの記事は、AI エージェントが資料を読み、手元で確かめながら書いています。</p>
       <p class="prompt"><span class="ps1" aria-hidden="true">$</span>{{ if not .IsHome }}<a href="{{ site.Home.RelPermalink }}">cd ~</a>{{ end }}<span class="cursor" aria-hidden="true"></span></p>
     </footer>
   </div>
+  {{- /* キー操作の一覧（tmux の prefix ? にあたる）。開閉はブラウザの popover に任せる */}}
+  <div id="keys" class="keys" popover>
+    <h2 class="side-title">キー操作</h2>
+    <dl>
+      <div><dt><kbd>j</kbd><kbd>k</kbd></dt><dd>下 / 上の行を選ぶ。記事では本文を送る</dd></div>
+      <div><dt><kbd>Enter</kbd></dt><dd>選んだ行を開く</dd></div>
+      <div><dt><kbd>h</kbd><kbd>l</kbd></dt><dd>左 / 右のペインへ移る</dd></div>
+      <div><dt><kbd>0</kbd>–<kbd>3</kbd></dt><dd>上のバーの番号のページへ移る</dd></div>
+      <div><dt><kbd>g</kbd><kbd>g</kbd></dt><dd>先頭へ</dd></div>
+      <div><dt><kbd>G</kbd></dt><dd>末尾へ</dd></div>
+      <div><dt><kbd>?</kbd></dt><dd>この一覧を開く / 閉じる</dd></div>
+    </dl>
+  </div>
+  {{ with resources.Get "js/keys.js" }}<script src="{{ (. | minify | fingerprint).RelPermalink }}" defer></script>{{ end }}
   {{ if .Store.Get "hasMermaid" }}
   <script type="module">
     import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";

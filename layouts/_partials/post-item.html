@@ -1,11 +1,13 @@
-<li class="post-item">
+{{- /* 一覧の 1 行。.page に記事、.row に行の番号（出る順番）を受け取る */ -}}
+{{- $p := .page -}}
+<li class="post-item out" style="--r:{{ math.Min .row 12 }}">
   <div class="post-meta">
-    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
-    {{ range (.GetTerms "categories") }}<a class="kind" data-kind="{{ .LinkTitle }}" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
+    <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006-01-02" }}</time>
+    {{ range ($p.GetTerms "categories") }}<a class="kind" data-kind="{{ .LinkTitle }}" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
   </div>
   <div class="post-main">
-    <a class="post-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
-    {{ with index (findRE `(?s)<p>.*?</p>` .Content 1) 0 }}<p class="post-lead">{{ . | plainify | htmlUnescape | truncate 120 }}</p>{{ end }}
-    {{ with .GetTerms "tags" }}<div class="post-tags">{{ range . }}<a class="tag" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}</div>{{ end }}
+    <a class="post-title" style="{{ partial "vt-title.html" $p }}" href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
+    {{ with index (findRE `(?s)<p>.*?</p>` $p.Content 1) 0 }}<p class="post-lead">{{ . | plainify | htmlUnescape | truncate 120 }}</p>{{ end }}
+    {{ with $p.GetTerms "tags" }}<div class="post-tags">{{ range . }}<a class="tag" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}</div>{{ end }}
   </div>
 </li>

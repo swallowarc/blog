@@ -1,15 +1,15 @@
 {{ define "main" }}
 <article class="article">
-  {{ with .File }}<p class="cmd"><span class="ps1" aria-hidden="true">$</span> cat posts/{{ .BaseFileName }}.md</p>{{ end }}
-  <header class="article-header">
+  {{ with .File }}<p class="cmd" style="--t:60ms"><span class="ps1" aria-hidden="true">$</span> {{ partial "typed.html" (printf "cat posts/%s.md" .BaseFileName) }}</p>{{ end }}
+  <header class="article-header out" style="--t:360ms">
     <div class="post-meta">
       <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
       {{ range (.GetTerms "categories") }}<a class="kind" data-kind="{{ .LinkTitle }}" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ end }}
       {{ range (.GetTerms "tags") }}<a class="tag" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>{{ end }}
     </div>
-    <h1>{{ .Title }}</h1>
+    <h1><span class="article-title" style="{{ partial "vt-title.html" . }}">{{ .Title }}</span></h1>
   </header>
-  <div class="article-body">
+  <div class="article-body out" style="--t:360ms">
     {{ .Content }}
   </div>
 </article>

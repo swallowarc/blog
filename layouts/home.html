@@ -1,11 +1,12 @@
 {{ define "main" }}
-<p class="cmd"><span class="ps1" aria-hidden="true">$</span> cat README</p>
-<p class="readme">{{ site.Params.description }}</p>
-<h1 class="cmd"><span class="ps1" aria-hidden="true">$</span> ls -lt posts/</h1>
+{{- /* --t は、訪問して最初のページで各行が出る時刻。コマンドが打たれてから出力が出る順に並べる */ -}}
+<p class="cmd" style="--t:60ms"><span class="ps1" aria-hidden="true">$</span> {{ partial "typed.html" "cat README" }}</p>
+<p class="readme out" style="--t:360ms">{{ site.Params.description }}</p>
+<h1 class="cmd" style="--t:430ms"><span class="ps1" aria-hidden="true">$</span> {{ partial "typed.html" "ls -lt posts/" }}</h1>
 {{ $pages := where site.RegularPages "Section" "posts" }}
 {{ $paginator := .Paginate $pages }}
-<ul class="post-list">
-  {{ range $paginator.Pages }}{{ partial "post-item.html" . }}{{ end }}
+<ul class="post-list" style="--t:730ms">
+  {{ range $i, $p := $paginator.Pages }}{{ partial "post-item.html" (dict "page" $p "row" $i) }}{{ end }}
 </ul>
 {{ if not $pages }}<p class="comment"># まだ記事はありません。</p>{{ end }}
 {{ partial "pager.html" . }}

@@ -1,0 +1,3 @@
+{{- /* 記事の題に付けるページ遷移用の名前。一覧の題と記事の見出しを同じ名前にして、遷移のときに位置を引き継ぐ */ -}}
+{{- with .File }}{{ return (printf "view-transition-name:p%s" .UniqueID | safeCSS) }}{{ end -}}
+{{- return ("" | safeCSS) -}}

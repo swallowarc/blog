@@ -1,14 +1,14 @@
 {{ define "main" }}
 {{ if eq .Kind "taxonomy" }}
-<h1 class="cmd"><span class="ps1" aria-hidden="true">$</span> ls {{ .Type }}/</h1>
-<ul class="term-list">
-  {{ range .Data.Terms.ByCount }}<li><span class="count">{{ .Count }}</span><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a></li>{{ end }}
+<h1 class="cmd" style="--t:60ms"><span class="ps1" aria-hidden="true">$</span> {{ partial "typed.html" (printf "ls %s/" .Type) }}</h1>
+<ul class="term-list" style="--t:360ms">
+  {{ range $i, $e := .Data.Terms.ByCount }}<li class="out" style="--r:{{ math.Min $i 12 }}"><span class="count">{{ .Count }}</span><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a></li>{{ end }}
 </ul>
 {{ else }}
-<h1 class="cmd"><span class="ps1" aria-hidden="true">$</span> ls -lt {{ if eq .Kind "term" }}{{ .Type }}/{{ .Title }}/{{ else }}posts/{{ end }}</h1>
+<h1 class="cmd" style="--t:60ms"><span class="ps1" aria-hidden="true">$</span> {{ partial "typed.html" (cond (eq .Kind "term") (printf "ls -lt %s/%s/" .Type .Title) "ls -lt posts/") }}</h1>
 {{ $paginator := .Paginate .RegularPagesRecursive }}
-<ul class="post-list">
-  {{ range $paginator.Pages }}{{ partial "post-item.html" . }}{{ end }}
+<ul class="post-list" style="--t:360ms">
+  {{ range $i, $p := $paginator.Pages }}{{ partial "post-item.html" (dict "page" $p "row" $i) }}{{ end }}
 </ul>
 {{ partial "pager.html" . }}
 {{ end }}

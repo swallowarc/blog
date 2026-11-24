@@ -1,0 +1,4 @@
+{{- /* プロンプトに打ち込まれるコマンド。1 文字ずつの span も出しておき、訪問して最初のページでだけ CSS が順に見せる */ -}}
+{{- $chars := split . "" -}}
+<span class="typed" style="--n:{{ len $chars }}"><span class="typed-text">{{ . }}</span><span class="typed-chars" aria-hidden="true">{{ range $i, $c := $chars }}<span style="--i:{{ $i }}">{{ $c }}</span>{{ end }}</span></span>
+{{- /* 末尾の改行を出さない */ -}}
