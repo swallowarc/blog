@@ -1,0 +1,80 @@
+{{- /* 右のペイン。記事では同じタグの記事と最近の記事を、一覧では種類とタグを出す */ -}}
+{{- $posts := where site.RegularPages "Section" "posts" -}}
+{{- $isPost := and .IsPage (eq .Section "posts") -}}
+{{- $isTaxonomy := eq .Kind "taxonomy" -}}
+
+{{- /* 同じタグの記事。タグごとに新しい順で 2 本まで、全体で 4 本まで。同じ記事は 2 度出さない */ -}}
+{{- $shown := slice -}}
+{{- $groups := slice -}}
+{{- if $isPost -}}
+  {{- $shown = slice . -}}
+  {{- $left := 4 -}}
+  {{- range .GetTerms "tags" -}}
+    {{- $picked := first (cond (lt $left 2) $left 2) (complement $shown .Pages.ByDate.Reverse) -}}
+    {{- if $picked -}}
+      {{- $groups = $groups | append (dict "term" . "pages" $picked) -}}
+      {{- $shown = $shown | append $picked -}}
+      {{- $left = sub $left (len $picked) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* 最近の記事。トップは一覧そのものが最近の記事なので出さない */ -}}
+{{- $recent := slice -}}
+{{- if $isPost -}}
+  {{- $recent = first 5 (complement $shown $posts.ByDate.Reverse) -}}
+{{- else if not .IsHome -}}
+  {{- $recent = first 5 $posts.ByDate.Reverse -}}
+{{- end -}}
+
+{{- $showKinds := not (and $isTaxonomy (eq .Type "categories")) -}}
+{{- $showTags := and (not $isPost) (not (and $isTaxonomy (eq .Type "tags"))) -}}
+{{- $here := .RelPermalink -}}
+<aside class="side" aria-label="ほかの記事">
+  <div class="side-inner">
+    {{- with $groups }}
+    <section class="side-section">
+      <h2 class="side-title">同じタグの記事</h2>
+      {{- range . }}
+      <h3 class="side-tag"><a class="tag" href="{{ .term.RelPermalink }}">#{{ .term.LinkTitle }}</a><span class="count">{{ len .term.Pages }}</span></h3>
+      <ul class="side-list">
+        {{- range .pages }}{{ partial "side-post.html" . }}{{ end }}
+      </ul>
+      {{- end }}
+    </section>
+    {{- end }}
+    {{- with $recent }}
+    <section class="side-section">
+      <h2 class="side-title">最近の記事</h2>
+      <ul class="side-list">
+        {{- range . }}{{ partial "side-post.html" . }}{{ end }}
+      </ul>
+    </section>
+    {{- end }}
+    {{- if $showKinds }}{{ with site.Taxonomies.categories }}
+    <section class="side-section">
+      <h2 class="side-title">種類</h2>
+      <ul class="side-terms">
+        {{- range .Alphabetical }}
+        <li><a class="kind{{ if eq .Page.RelPermalink $here }} on{{ end }}" data-kind="{{ .Page.LinkTitle }}" href="{{ .Page.RelPermalink }}"{{ if eq .Page.RelPermalink $here }} aria-current="page"{{ end }}>{{ .Page.LinkTitle }}</a><span class="count">{{ .Count }}</span></li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}{{ end }}
+    {{- if $showTags }}{{ with site.Taxonomies.tags }}
+    <section class="side-section">
+      <h2 class="side-title">タグ</h2>
+      {{- /* 2 本以上の記事があるタグだけを、多い順に 12 個まで。残りは「すべてのタグ」から */ -}}
+      {{- $n := 0 }}
+      <ul class="side-terms">
+        {{- range .ByCount }}{{ if and (ge .Count 2) (lt $n 12) }}{{ $n = add $n 1 }}
+        <li><a class="tag{{ if eq .Page.RelPermalink $here }} on{{ end }}" href="{{ .Page.RelPermalink }}"{{ if eq .Page.RelPermalink $here }} aria-current="page"{{ end }}>#{{ .Page.LinkTitle }}</a><span class="count">{{ .Count }}</span></li>
+        {{- end }}{{ end }}
+      </ul>
+      {{- if gt (len .) $n }}{{ with site.GetPage "/tags" }}
+      <p class="side-more"><a href="{{ .RelPermalink }}">すべてのタグ</a><span class="count">{{ len site.Taxonomies.tags }}</span></p>
+      {{- end }}{{ end }}
+    </section>
+    {{- end }}{{ end }}
+  </div>
+</aside>

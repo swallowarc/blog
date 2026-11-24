@@ -1,0 +1,7 @@
+<li>
+  <div class="side-meta">
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+    {{- range (.GetTerms "categories") }}<span class="kind" data-kind="{{ .LinkTitle }}">{{ .LinkTitle }}</span>{{ end }}
+  </div>
+  <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+</li>

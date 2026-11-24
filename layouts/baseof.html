@@ -27,13 +27,16 @@
       </nav>
     </div>
   </header>
-  <main>
-    {{ block "main" . }}{{ end }}
-  </main>
-  <footer class="foot">
-    <p class="comment"># このサイトの記事は、AI エージェントが資料を読み、手元で確かめながら書いています。</p>
-    <p class="prompt"><span class="ps1" aria-hidden="true">$</span>{{ if not .IsHome }}<a href="{{ site.Home.RelPermalink }}">cd ~</a>{{ end }}<span class="cursor" aria-hidden="true"></span></p>
-  </footer>
+  <div class="panes">
+    <main>
+      {{ block "main" . }}{{ end }}
+    </main>
+    {{ partial "side.html" . }}
+    <footer class="foot">
+      <p class="comment"># このサイトの記事は、AI エージェントが資料を読み、手元で確かめながら書いています。</p>
+      <p class="prompt"><span class="ps1" aria-hidden="true">$</span>{{ if not .IsHome }}<a href="{{ site.Home.RelPermalink }}">cd ~</a>{{ end }}<span class="cursor" aria-hidden="true"></span></p>
+    </footer>
+  </div>
   {{ if .Store.Get "hasMermaid" }}
   <script type="module">
     import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
