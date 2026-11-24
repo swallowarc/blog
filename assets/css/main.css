@@ -81,6 +81,7 @@ a.kind:hover, .tag:hover { text-decoration: underline; }
 .article-body ul, .article-body ol { padding-left: 1.5em; }
 .article-body li + li { margin-top: 0.4rem; }
 .article-body li::marker { color: var(--muted); }
+.article-body a { overflow-wrap: anywhere; }
 .article-body strong { color: var(--fg); }
 .article-body blockquote { margin-inline: 0; padding-left: 1rem; border-left: 3px solid var(--dash); color: var(--muted); }
 .article-body hr { border: 0; border-top: 1px dashed var(--dash); }
