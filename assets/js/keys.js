@@ -55,6 +55,8 @@
     if (e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
     const t = e.target;
     if (t instanceof HTMLElement && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    // 図を拡大している間は、キーを dialog に任せる
+    if (document.querySelector("dialog[open]")) return;
     const k = e.key;
     if (k === "?") { if (help && help.togglePopover) help.togglePopover(); }
     else if (help && help.matches(":popover-open")) return;

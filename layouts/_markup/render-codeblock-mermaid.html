@@ -1,4 +1,7 @@
-<div class="figure"><pre class="mermaid">
+<div class="figure">
+  <button class="figure-zoom" type="button" aria-label="図を拡大する">拡大</button>
+  <div class="figure-scroll"><pre class="mermaid">
 {{ .Inner | htmlEscape | safeHTML }}
 </pre></div>
+</div>
 {{ .Page.Store.Set "hasMermaid" true }}
