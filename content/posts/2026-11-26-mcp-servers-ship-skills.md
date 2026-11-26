@@ -13,14 +13,14 @@ MCP サーバーを作っていると、ツールの description がどんどん
 
 ```mermaid
 sequenceDiagram
-    participant C as "Claude Code"
-    participant S as "MCP サーバー"
-    C->>S: "skills/list"
-    S-->>C: "frontmatter とファイル一覧（SHA-256 付き）"
-    C->>C: "利用者の承認"
-    C->>S: "resources/read SKILL.md"
-    S-->>C: "SKILL.md の中身"
-    C->>C: "ダイジェストと frontmatter を検証して読み込む"
+    participant C as Claude Code
+    participant S as MCP サーバー
+    C->>S: skills/list
+    S-->>C: frontmatter とファイル一覧（SHA-256 付き）
+    C->>C: 利用者の承認
+    C->>S: resources/read SKILL.md
+    S-->>C: SKILL.md の中身
+    C->>C: ダイジェストと frontmatter を検証して読み込む
 ```
 
 [発表記事](https://claude.com/resources/articles/skills-over-mcp-tasks-and-more)は、スキルは必要になるまで読み込まれず、サーバーの更新と一緒に更新されると説明しています。利用者が別にインストールするものはありません。

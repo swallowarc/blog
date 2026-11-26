@@ -113,15 +113,15 @@ error: found a counterexample
 
 ```mermaid
 sequenceDiagram
-    participant C as "呼び出し側"
-    participant A as "返金処理"
-    participant J as "ジャーナル"
-    C->>A: "返金 r1 金額 1"
-    A->>J: "r1 を追記"
-    Note over A: "クラッシュして再起動"
-    J->>A: "再生で金額だけ復元"
-    C->>A: "r1 を再試行 金額 40"
-    A->>J: "r1 をもう一度追記"
+    participant C as 呼び出し側
+    participant A as 返金処理
+    participant J as ジャーナル
+    C->>A: 返金 r1 金額 1
+    A->>J: r1 を追記
+    Note over A: クラッシュして再起動
+    J->>A: 再生で金額だけ復元
+    C->>A: r1 を再試行 金額 40
+    A->>J: r1 をもう一度追記
 ```
 
 State 3 の時点で累計は 41 で、売上額 100 に対して余裕があります。だから金額のチェックは通ってしまい、`noOverRefund` は破れず、`noDuplicate` だけが破れます。「上限を守っているから大丈夫」というレビューをすり抜ける形のバグです。

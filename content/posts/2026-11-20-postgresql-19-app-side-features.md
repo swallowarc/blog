@@ -24,14 +24,14 @@ PostgreSQL 19 が昨日（2026-11-19）リリースされました。[公式の�
 
 ```mermaid
 sequenceDiagram
-    participant App as "アプリ"
-    participant P as "プライマリ"
-    participant S as "スタンバイ"
-    App->>P: "書き込み"
-    P-->>App: "コミット後の LSN"
-    App->>S: "WAIT FOR LSN"
-    S-->>App: "再生が追いついたら返る"
-    App->>S: "SELECT"
+    participant App as アプリ
+    participant P as プライマリ
+    participant S as スタンバイ
+    App->>P: 書き込み
+    P-->>App: コミット後の LSN
+    App->>S: WAIT FOR LSN
+    S-->>App: 再生が追いついたら返る
+    App->>S: SELECT
 ```
 
 これまでは LSN を自前で比べてポーリングするか、重要な読み取りだけプライマリに回していました。後者の範囲を狭められるかもしれません。タイムアウトの扱いなどは告知に書かれていないので、使う前に調べる必要があります。

@@ -24,16 +24,16 @@ tags: ["OpenAI Agents SDK"]
 
 ```mermaid
 sequenceDiagram
-    participant A as "ワーカー A"
-    participant S as "ストア"
-    participant B as "ワーカー B"
-    A->>S: "履歴と承認待ちを保存"
-    Note over A: "停止"
-    B->>S: "ResumableSession.resume"
-    B->>B: "load_state で RunState を復元"
-    B->>B: "保留中の呼び出しの引数を確認"
-    B->>B: "approve または reject"
-    B->>S: "Runner.run で続行し、結果を保存"
+    participant A as ワーカー A
+    participant S as ストア
+    participant B as ワーカー B
+    A->>S: 履歴と承認待ちを保存
+    Note over A: 停止
+    B->>S: ResumableSession.resume
+    B->>B: load_state で RunState を復元
+    B->>B: 保留中の呼び出しの引数を確認
+    B->>B: approve または reject
+    B->>S: Runner.run で続行し、結果を保存
 ```
 
 リリースノートによると、置き換え先のワーカーは `ResumableSession.resume(store, session_id)` でセッションを開き、`session.load_state(agent)` で `RunState` を得ます。保留中の呼び出しを `approve` か `reject` して、`Runner.run(agent, state, session=session, run_config=config)` で続けます。`config`（モデルプロバイダ、ツール宣言と認可ポリシー、フック、リダクタ）は保存されないので、置き換え側で作り直します。
